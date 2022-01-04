@@ -48,15 +48,16 @@ public class IndexController {
         return "joinForm";
     }
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public String login() {
         return "login";
     }
 
     @PostMapping("/join")
-    public @ResponseBody String join(User user) {
+    public String join(User user) {
         user.setRole("ROLE_USER");
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        System.out.println(user.getPassword());
         userRepository.save(user);
         return "redirect:/loginForm";
     }
