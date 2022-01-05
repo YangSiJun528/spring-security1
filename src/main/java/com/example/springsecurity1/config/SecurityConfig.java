@@ -2,6 +2,7 @@ package com.example.springsecurity1.config;
 
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -9,6 +10,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configurable
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
+// Secured 애노테이션(메소드 위에 쓰며 입력한 ROLE 만 접속 가능) 활성화,
+// PreAuthorize, PostAuthorize 애노테이션 활성화(Pre는 메서드 시각 전에 작동, Post는 후에; @Secured 랑 비슷한데 hasRole()사용해서 여러 ROLE 허용),
+// 글로벌로 작성을 추천함, 간단하게 사용할 때만 사용하기
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     // 메서드가 반환하는 겍체가 빈 컨테이너에 등록됨

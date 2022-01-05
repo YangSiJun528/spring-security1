@@ -3,6 +3,7 @@ package com.example.springsecurity1.controller;
 import com.example.springsecurity1.model.User;
 import com.example.springsecurity1.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -65,5 +66,16 @@ public class IndexController {
     @GetMapping("/joinProc")
     public @ResponseBody String joinProc() {
         return "join 완료";
+    }
+
+    @GetMapping("/info")
+    public @ResponseBody String info() {
+        return "개인 정보";
+    }
+
+    @PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
+    @GetMapping("/data")
+    public @ResponseBody String data() {
+        return "데이터 정보";
     }
 }
