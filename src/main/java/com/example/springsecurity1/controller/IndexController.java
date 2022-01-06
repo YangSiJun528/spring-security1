@@ -1,10 +1,15 @@
 package com.example.springsecurity1.controller;
 
+import com.example.springsecurity1.config.auth.PrincipalDetails;
 import com.example.springsecurity1.model.User;
 import com.example.springsecurity1.repository.UserRepository;
+import org.apache.catalina.realm.AuthenticatedUserRealm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +22,7 @@ public class IndexController {
     @Autowired
     public UserRepository userRepository;
 
+    @Lazy
     @Autowired
     public BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -25,8 +31,14 @@ public class IndexController {
         return "index";
     }
 
+    @GetMapping({"/test/login"})
+    public @ResponseBody String testLogin(Authentication authentication) {
+        return "index";
+    }
+
     @GetMapping("/user")
-    public String user() {
+    public @ResponseBody String user(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        System.out.println("principalDetails :" + principalDetails.getUser());
         return "user";
     }
 

@@ -14,8 +14,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Builder
 @Data
+@Builder
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,8 +28,8 @@ public class User {
     private String email;
     private String role; //ROLE_USER, ROLE_ADMIN
     // OAuth를 위해 구성한 추가 필드 2개
-//    private String provider;
-//    private String providerId;
+    private String provider;
+    private String providerId;
     @CreationTimestamp
     private Timestamp createDate;
 }
