@@ -1,6 +1,9 @@
 package com.example.springsecurity1.config.oauth;
 
 import com.example.springsecurity1.config.auth.PrincipalDetails;
+import com.example.springsecurity1.config.auth.provider.FacebookUserInfo;
+import com.example.springsecurity1.config.auth.provider.GoogleUserInfo;
+import com.example.springsecurity1.config.auth.provider.Oauth2UserInfo;
 import com.example.springsecurity1.model.User;
 import com.example.springsecurity1.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,16 +31,29 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
+        Oauth2UserInfo oauth2UserInfo = null;
+
         // code를 통해 구성한 정보
         System.out.println("userRequest clientRegistration : " + userRequest.getClientRegistration());
         // token을 통해 응답받은 회원정보
         System.out.println("oAuth2User : " + oAuth2User);
 
-        String provider = userRequest.getClientRegistration().getRegistrationId(); // google
-        String providerId = oAuth2User.getAttribute("sub");
+        switch (userRequest.getClientRegistration().getRegistrationId()) {
+            case "google":
+                oauth2UserInfo = new GoogleUserInfo(oAuth2User.getAttributes());
+                break;
+            case "facebook":
+                oauth2UserInfo = new FacebookUserInfo(oAuth2User.getAttributes());
+                break;
+            default:
+                System.out.println("잘못된 Oauth 요청입니다.");
+        }
+
+        String provider = oauth2UserInfo.getProvider(); // google
+        String providerId = oauth2UserInfo.getProviderId();
         String username = provider+"_"+providerId; // ex) google_112312312312321321
         String password = bCryptPasswordEncoder.encode("구글비번");
-        String email = oAuth2User.getAttribute("email");
+        String email = oauth2UserInfo.getEmail();
         String role = "ROLE_USER";
 
         User userEntity = userRepository.findByUsername(username);
