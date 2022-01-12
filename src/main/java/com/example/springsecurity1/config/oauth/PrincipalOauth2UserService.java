@@ -3,6 +3,7 @@ package com.example.springsecurity1.config.oauth;
 import com.example.springsecurity1.config.auth.PrincipalDetails;
 import com.example.springsecurity1.config.auth.provider.FacebookUserInfo;
 import com.example.springsecurity1.config.auth.provider.GoogleUserInfo;
+import com.example.springsecurity1.config.auth.provider.NaverUserInfo;
 import com.example.springsecurity1.config.auth.provider.Oauth2UserInfo;
 import com.example.springsecurity1.model.User;
 import com.example.springsecurity1.repository.UserRepository;
@@ -14,6 +15,8 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @Service
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
@@ -44,6 +47,9 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
                 break;
             case "facebook":
                 oauth2UserInfo = new FacebookUserInfo(oAuth2User.getAttributes());
+                break;
+            case "naver":
+                oauth2UserInfo = new NaverUserInfo((Map)oAuth2User.getAttributes().get("response"));
                 break;
             default:
                 System.out.println("잘못된 Oauth 요청입니다.");
